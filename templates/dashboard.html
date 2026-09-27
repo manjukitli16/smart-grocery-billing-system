@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Overview · Fresh Mart{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">STORE OVERVIEW</p><h1>Good day, manager.</h1><p class="muted">Here's what's happening at your store today.</p></div><a class="button button-primary" href="{{ url_for('billing.checkout') }}"><span>＋</span> Start a sale</a></div>
+<div class="metric-grid">
+  <article class="metric"><div class="metric-top"><span>Sales today</span><span class="metric-icon green">↗</span></div><strong>₹{{ '%.2f'|format(today_total) }}</strong><small>{{ today_count }} completed {{ 'sale' if today_count == 1 else 'sales' }}</small></article>
+  <article class="metric"><div class="metric-top"><span>Products</span><span class="metric-icon yellow">▤</span></div><strong>{{ product_count }}</strong><small>Items in your catalog</small></article>
+  <article class="metric"><div class="metric-top"><span>Needs attention</span><span class="metric-icon coral">!</span></div><strong>{{ low_stock|length }}</strong><small>Products at 5 units or fewer</small></article>
+</div>
+<div class="dashboard-grid">
+  <section class="panel"><div class="section-heading"><div><h2>Recent sales</h2><p class="muted">Your latest completed transactions</p></div><a class="text-link" href="{{ url_for('sales.index') }}">View all <span>→</span></a></div>
+    {% if recent_bills %}<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Customer</th><th>Date</th><th class="align-right">Total</th></tr></thead><tbody>{% for bill in recent_bills %}<tr><td><a class="table-link" href="{{ url_for('billing.receipt', bill_id=bill.id) }}">#{{ '%04d'|format(bill.id) }}</a></td><td>{{ bill.customer }}</td><td>{{ bill.created_at }}</td><td class="align-right money">₹{{ '%.2f'|format(bill.total) }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><span class="empty-mark">↗</span><strong>No sales yet</strong><p>Your completed sales will appear here.</p><a class="text-link" href="{{ url_for('billing.checkout') }}">Create your first sale →</a></div>{% endif %}
+  </section>
+  <section class="panel stock-panel"><div class="section-heading"><div><h2>Stock watch</h2><p class="muted">Low inventory to review</p></div><a class="text-link" href="{{ url_for('inventory.index') }}">Inventory <span>→</span></a></div>
+    {% if low_stock %}<ul class="stock-list">{% for product in low_stock[:6] %}<li><div><strong>{{ product.name }}</strong><small>{{ product.category or 'Uncategorized' }}</small></div><span class="stock-count {{ 'out' if product.stock == 0 else '' }}">{{ product.stock }} left</span></li>{% endfor %}</ul>{% else %}<div class="empty-state compact"><span class="empty-mark">✓</span><strong>Stock looks good</strong><p>No products need attention.</p></div>{% endif %}
+  </section>
+</div>
+{% endblock %}

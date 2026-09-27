@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Edit {{ product.name }} · Fresh Mart{% endblock %}
+{% block breadcrumb %}<a href="{{ url_for('inventory.index') }}">Inventory</a> / Edit product{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">CATALOG</p><h1>Edit product</h1><p class="muted">Update the details for {{ product.name }}.</p></div></div>
+<section class="panel form-panel"><form method="post" class="product-form">
+  <label>Product name<input name="name" required maxlength="120" value="{{ request.form.get('name', product.name) }}"></label>
+  <label>Category<input name="category" maxlength="80" value="{{ request.form.get('category', product.category) }}" placeholder="e.g. Produce"></label>
+  <div class="form-row"><label>Unit price<div class="input-prefix"><span>₹</span><input type="number" name="price" required min="0" step="0.01" value="{{ request.form.get('price', product.price) }}"></div></label><label>In stock<input type="number" name="stock" required min="0" step="1" value="{{ request.form.get('stock', product.stock) }}"></label></div>
+  <div class="form-actions"><a class="button button-quiet" href="{{ url_for('inventory.index') }}">Cancel</a><button class="button button-primary" type="submit">Save changes</button></div>
+</form></section>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Sales history · Fresh Mart{% endblock %}
+{% block breadcrumb %}Sales history{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">TRANSACTIONS</p><h1>Sales history</h1><p class="muted">A record of completed store transactions.</p></div><a class="button button-primary" href="{{ url_for('billing.checkout') }}"><span>＋</span> New sale</a></div>
+<section class="panel"><div class="section-heading"><div><h2>All transactions <span class="count-badge">{{ bills|length }}</span></h2></div></div>{% if bills %}<div class="table-wrap"><table><thead><tr><th>Receipt</th><th>Customer</th><th>Date</th><th class="align-right">Total</th><th></th></tr></thead><tbody>{% for bill in bills %}<tr><td><a class="table-link" href="{{ url_for('billing.receipt', bill_id=bill.id) }}">#{{ '%04d'|format(bill.id) }}</a></td><td>{{ bill.customer }}</td><td>{{ bill.created_at }}</td><td class="align-right money">₹{{ '%.2f'|format(bill.total) }}</td><td class="align-right"><a class="text-link" href="{{ url_for('billing.receipt', bill_id=bill.id) }}">Receipt →</a></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><span class="empty-mark">▧</span><strong>No transactions yet</strong><p>Completed sales will be saved here.</p><a class="button button-secondary" href="{{ url_for('billing.checkout') }}">Start a sale</a></div>{% endif %}</section>
+{% endblock %}

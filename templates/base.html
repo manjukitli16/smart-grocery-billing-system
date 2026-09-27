@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Fresh Mart{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/print.css') }}" media="print">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard.index') }}"><span class="brand-mark">F</span><span>fresh<span class="brand-light">mart</span></span></a>
+    <div class="sidebar-label">STORE</div>
+    <nav class="nav-list" aria-label="Main navigation">
+      <a class="nav-link {{ 'active' if request.endpoint == 'dashboard.index' else '' }}" href="{{ url_for('dashboard.index') }}"><span class="nav-icon">▦</span>Overview</a>
+      <a class="nav-link {{ 'active' if request.endpoint == 'inventory.index' else '' }}" href="{{ url_for('inventory.index') }}"><span class="nav-icon">▤</span>Inventory</a>
+      <a class="nav-link {{ 'active' if request.endpoint == 'billing.checkout' else '' }}" href="{{ url_for('billing.checkout') }}"><span class="nav-icon">＋</span>New sale</a>
+      <a class="nav-link {{ 'active' if request.endpoint == 'sales.index' else '' }}" href="{{ url_for('sales.index') }}"><span class="nav-icon">▧</span>Sales history</a>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot"></span>Store is open</div>
+  </aside>
+  <main class="main-content">
+    <header class="topbar"><span class="topbar-context">Fresh Mart <span>/</span> {% block breadcrumb %}Overview{% endblock %}</span><span class="user-chip">FM <span>Store manager</span></span></header>
+    <section class="page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}" role="status">{{ message }}</div>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</body>
+</html>

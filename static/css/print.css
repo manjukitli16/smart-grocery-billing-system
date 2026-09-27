@@ -1,0 +1,11 @@
+
+@media print{
+  @page{size:auto;margin:16mm}
+  body{background:#fff;color:#111;font-family:Arial,sans-serif}
+  .sidebar,.topbar,.no-print,.flash-stack{display:none!important}
+  .main-content{margin:0;min-height:0}
+  .page-content{max-width:none;padding:0}
+  .receipt{max-width:none;margin:0;padding:0;border:0;box-shadow:none}
+  .receipt-brand,.receipt-meta,.receipt-total{border-color:#bbb}
+  .receipt-thanks{color:#555}
+}

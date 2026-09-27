@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}New sale · Fresh Mart{% endblock %}
+{% block breadcrumb %}New sale{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">POINT OF SALE</p><h1>New sale</h1><p class="muted">Build the order and complete checkout.</p></div></div>
+{% if products %}
+<form method="post" class="checkout-layout" id="billing-form">
+	<section class="panel checkout-panel">
+		<div class="section-heading"><div><h2>Order items</h2><p class="muted">Select products and quantities.</p></div><button class="button button-secondary button-small" type="button" id="add-line">＋ Add item</button></div>
+		<div id="bill-lines" class="bill-lines"><div class="bill-line"><label class="line-product">Product<select name="product_id" required><option value="">Choose a product</option>{% for product in products %}<option value="{{ product.id }}" data-price="{{ '%.2f'|format(product.price) }}">{{ product.name }} · ₹{{ '%.2f'|format(product.price) }} ({{ product.stock }} in stock)</option>{% endfor %}</select></label><label class="line-quantity">Qty<input type="number" name="quantity" min="1" step="1" value="1" required></label><button type="button" class="remove-line" aria-label="Remove item" title="Remove item">×</button></div></div>
+		<label class="customer-field">Customer name <span class="muted">(optional)</span><input name="customer" maxlength="120" placeholder="Walk-in customer"></label>
+	</section>
+	<aside class="panel order-summary"><h2>Summary</h2><div class="summary-row"><span>Items</span><strong id="summary-count">0</strong></div><div class="summary-total"><span>Total due</span><strong id="summary-total">₹0.00</strong></div><p class="summary-note">Stock is deducted when the sale is completed.</p><button type="submit" class="button button-primary button-wide">Complete sale <span>→</span></button></aside>
+</form>
+<script src="{{ url_for('static', filename='js/billing.js') }}" defer></script>
+{% else %}
+<section class="panel empty-state"><span class="empty-mark">＋</span><strong>No products available to sell</strong><p>Add products with stock before starting checkout.</p><a class="button button-primary" href="{{ url_for('inventory.add') }}">Add a product</a></section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<jsp:include page="/WEB-INF/jsp/fragments/header.jsp"><jsp:param name="title" value="New sale"/><jsp:param name="active" value="billing"/><jsp:param name="breadcrumb" value="New sale"/></jsp:include>
+<div class="page-heading"><div><p class="eyebrow">POINT OF SALE</p><h1>New sale</h1><p class="muted">Build the order and review the total before checkout.</p></div></div>
+<c:choose><c:when test="${not empty products}"><form method="post" action="${pageContext.request.contextPath}/billing" class="checkout-layout" id="billing-form">
+  <section class="panel checkout-panel"><div class="section-heading"><div><h2>Order items</h2><p class="muted">Select products and quantities.</p></div><button class="button button-secondary button-small" type="button" id="add-line">＋ Add item</button></div>
+    <div id="bill-lines" class="bill-lines"><div class="bill-line"><label class="line-product">Product<select name="product_id" required><option value="">Choose a product</option><c:forEach items="${products}" var="product"><option value="${product.id}" data-price="${product.price}" data-stock="${product.stock}"><c:out value="${product.name}"/> · ₹<fmt:formatNumber value="${product.price}" minFractionDigits="2" maxFractionDigits="2"/> (${product.stock} in stock)</option></c:forEach></select></label><label class="line-quantity">Qty<input type="number" name="quantity" min="1" step="1" value="1" required></label><button type="button" class="remove-line" aria-label="Remove item" title="Remove item">×</button></div></div>
+    <label class="customer-field">Customer name <span class="muted">(optional)</span><input name="customer" maxlength="120" value="<c:out value='${customer}'/>" placeholder="Walk-in customer"></label>
+  </section>
+  <aside class="panel order-summary"><h2>Summary</h2><div class="summary-row"><span>Items</span><strong id="summary-count">0</strong></div><div class="summary-total"><span>Total due</span><strong id="summary-total">₹0.00</strong></div><p class="summary-note">Stock is deducted when the sale is completed.</p><button type="submit" class="button button-primary button-wide">Complete sale <span>→</span></button></aside>
+</form><script src="${pageContext.request.contextPath}/js/billing.js" defer></script></c:when><c:otherwise><section class="panel empty-state"><span class="empty-mark">＋</span><strong>No products available to sell</strong><p>Add products with stock before starting checkout.</p><a class="button button-primary" href="${pageContext.request.contextPath}/inventory/add">Add a product</a></section></c:otherwise></c:choose>
+<jsp:include page="/WEB-INF/jsp/fragments/footer.jsp"/>
